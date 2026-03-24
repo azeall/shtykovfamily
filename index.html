@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shtykov Family</title>
+<style>
+@font-face {
+  font-family: 'BrokgauzEfron';
+  src: url('fonts/BrokgauzEfron.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'BrokgauzEfron',Georgia,serif;background:#fff;color:#1a1a1a;overflow-x:hidden;}
+nav{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-bottom:1px solid #e8e8e8;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;width:100%;z-index:200;}
+.nav-logo{padding:0.7rem 0;display:flex;align-items:center;cursor:pointer;font-family:'BrokgauzEfron',Georgia,serif;font-size:1rem;font-weight:500;letter-spacing:0.08em;color:#111;}
+.nav-logo span{color:#9aa5b4;font-weight:300;margin-left:0.3rem;}
+.nav-links{display:flex;list-style:none;gap:0.25rem;}
+.nav-links li button{background:none;border:none;padding:0.5rem 0.9rem;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:#999;cursor:pointer;font-family:'BrokgauzEfron',Georgia,serif;transition:all 0.2s;border-radius:6px;}
+.nav-links li button:hover{color:#5a6878!important;background:#edf1f5!important;}
+.nav-links li button.active{color:#6e8494!important;font-weight:600!important;background:linear-gradient(135deg,#dde5ec,#e6edf3)!important;}
+.nav-links li button.nav-jubilee{color:#fff!important;background:#8DA9C4!important;border:1px solid #7a98b3!important;border-radius:6px;font-weight:600!important;}
+.nav-links li button.nav-jubilee:hover{background:#7a98b3!important;color:#fff!important;}
+.nav-links li button.nav-jubilee.active{background:#6a88a3!important;color:#fff!important;}
+@media(max-width:640px){
+  nav{padding:0 0.5rem;}
+  .nav-links{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;padding-bottom:2px;gap:0;}
+  .nav-links li button{padding:0.45rem 0.5rem;font-size:0.6rem;white-space:nowrap;}
+  .map-wrap svg{height:220px!important;}
+  .continent-tabs{gap:0.3rem;}
+  .ctab{padding:0.3rem 0.6rem;font-size:0.62rem;}
+  .inner{padding:1.5rem 1rem;}
+  .jtabs{gap:3px;}
+  .jtab{padding:5px 9px;font-size:0.7rem;}
+  .modal{max-height:90vh;overflow-y:auto;}
+}
+/* SMOOTH TRANSITIONS */
+.page{display:none;padding-top:70px;min-height:100vh;opacity:0;transition:opacity 0.3s ease;}
+.page.active{display:block;opacity:1;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;opacity:0;transition:opacity 0.25s ease;}
+.overlay.open{display:flex;animation:fadeIn 0.25s ease forwards;}
+.person-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:600;display:none;align-items:center;justify-content:center;padding:1.5rem;opacity:0;}
+.person-overlay.open{display:flex;animation:fadeIn 0.25s ease forwards;}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;display:none;align-items:center;justify-content:center;}
+.lightbox.open{display:flex;animation:fadeIn 0.2s ease forwards;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:520px;overflow:hidden;transform:translateY(16px);transition:transform 0.25s ease;animation:slideUp 0.25s ease forwards;}
+.person-modal{background:#fff;border-radius:20px;width:100%;max-width:320px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2);position:relative;animation:slideUp 0.25s ease forwards;}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.place-card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:0.75rem;cursor:pointer;transition:all 0.25s ease;text-align:center;}
+.fcard{background:#fff;border:1px solid #e8e8e8;border-radius:16px;overflow:hidden;transition:box-shadow 0.3s ease,transform 0.3s ease;}
+.ctab{padding:0.4rem 1rem;border-radius:100px;border:1px solid #e8e8e8;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;background:#f5f5f5;color:#999;font-family:'BrokgauzEfron',Georgia,serif;transition:all 0.25s ease;}
+.jtab{padding:7px 16px;border-radius:8px;border:1px solid #e8e8e8;font-size:0.8rem;cursor:pointer;background:#fff;color:#888;font-family:'BrokgauzEfron',Georgia,serif;transition:all 0.25s ease;letter-spacing:0.05em;}
+.nav-links li button{background:none;border:none;padding:0.5rem 0.9rem;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:#999;cursor:pointer;font-family:'BrokgauzEfron',Georgia,serif;transition:all 0.25s ease;border-radius:6px;}
+.pslot img{cursor:pointer;transition:opacity 0.2s ease,transform 0.2s ease;}
+.pslot img:hover{opacity:0.85;transform:scale(1.03);}
+.mobile-menu-btn{background:none;border:none;padding:0.9rem 1rem;font-size:0.88rem;letter-spacing:0.06em;text-transform:uppercase;color:#666;cursor:pointer;font-family:'BrokgauzEfron',Georgia,serif;border-radius:8px;text-align:left;transition:all 0.2s ease;width:100%;}
+.inner{max-width:860px;margin:0 auto;padding:2.5rem 2rem;}
+.pg-title{font-family:'BrokgauzEfron',Georgia,serif;font-size:clamp(1.8rem,5vw,3rem);color:#111;line-height:1;margin-bottom:0.5rem;}
+.pg-sub{font-size:0.82rem;color:#aaa;font-weight:300;margin-bottom:1.5rem;letter-spacing:0.05em;}
+.sep{width:100%;height:1px;background:#ebebeb;margin-bottom:2rem;}
+/* HOME */
+.hero-wrap{height:100vh;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.hero-logo{width:92vw;max-width:900px;display:block;margin:0 auto;}
+.scroll-hint{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;color:#ccc;font-size:0.68rem;letter-spacing:0.15em;opacity:0;transition:opacity 0.8s ease 0.5s;}
+.scroll-hint.vis{opacity:1;}
+.sh-line{width:1px;height:30px;background:linear-gradient(to bottom,#9ab4c8,transparent);animation:sp 2s ease-in-out infinite;}
+@keyframes sp{0%,100%{opacity:0.4;}50%{opacity:1;}}
+.hero-text{max-width:680px;margin:0 auto;padding:3rem 2.5rem 4rem;}
+.hero-brand{font-family:'BrokgauzEfron',Georgia,serif;font-size:1.1rem;font-weight:600;letter-spacing:0.12em;color:#111;margin-bottom:1.5rem;}
+.hero-p{font-family:'BrokgauzEfron',Georgia,serif;font-size:0.95rem;color:#444;line-height:1.9;font-weight:300;margin-top:1rem;}
+/* TRAVELS */
+.continent-tabs{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.ctab{padding:0.4rem 1rem;border-radius:100px;border:1px solid #e8e8e8;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;background:#f5f5f5;color:#999;font-family:'BrokgauzEfron',Georgia,serif;transition:all 0.2s;}
+.ctab:hover{color:#5a6878;background:#edf1f5;border-color:#d0dae4;}
+.ctab.active{color:#6e8494;font-weight:600;background:linear-gradient(135deg,#dde5ec,#e6edf3);border-color:#c8d4de;}
+.map-wrap{background:#eef4f8;border:1px solid #dde8f0;border-radius:12px;overflow:hidden;margin-bottom:1.5rem;}
+.place-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0.75rem;margin-top:1rem;}
+.place-card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:0.75rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.place-card:hover{border-color:#9ab8cc;background:#f0f6fa;}
+.pc-flag{font-size:1.2rem;margin-bottom:0.3rem;}
+.pc-name{font-size:0.78rem;font-weight:500;color:#111;font-family:'BrokgauzEfron',Georgia,serif;}
+.pc-country{font-size:0.65rem;color:#aaa;margin-top:0.15rem;}
+/* MODAL */
+/* removed duplicate */
+.mhead{padding:1.25rem 1.5rem 0.8rem;display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #f0f0f0;}
+.mtitle{font-family:'BrokgauzEfron',Georgia,serif;font-size:1.4rem;color:#111;}
+.msub{font-size:0.75rem;color:#aaa;margin-top:0.2rem;}
+.mclose{background:none;border:none;font-size:1.2rem;color:#aaa;cursor:pointer;padding:0.2rem;}
+.mphotos{padding:1rem 1.5rem 1.5rem;}
+.photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;}
+.pslot{background:#f5f8fa;border:1px dashed #c8d8e4;border-radius:8px;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:0.72rem;color:#aaa;gap:0.3rem;overflow:hidden;}
+.pslot span{font-size:1.2rem;}
+.pslot img{width:100%;height:100%;object-fit:cover;}
+/* JUBILEE */
+.jtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem;}
+.jtab{padding:7px 16px;border-radius:8px;border:1px solid #e8e8e8;font-size:0.8rem;cursor:pointer;background:#fff;color:#888;font-family:'BrokgauzEfron',Georgia,serif;transition:all 0.15s;letter-spacing:0.05em;}
+.jtab:hover{background:#f0f4f8;border-color:#c0d0dc;color:#555;}
+.jtab.active{background:linear-gradient(135deg,#dde5ec,#e6edf3);border-color:#c8d4de;color:#4a5a6a;font-weight:600;}
+.jpanel{display:none;}
+.jpanel.active{display:block;}
+.jsketch{background:#f5f8fa;border:1px dashed #c8d8e4;border-radius:12px;padding:3rem 2rem;text-align:center;margin-bottom:1rem;}
+.jsketch-ph{font-size:3rem;margin-bottom:0.75rem;}
+.jsketch-label{font-size:0.75rem;color:#aaa;letter-spacing:0.1em;text-transform:uppercase;}
+.congrats-list{display:flex;flex-direction:column;gap:1px;background:#ebebeb;border-radius:12px;overflow:hidden;}
+.citem{background:#fff;padding:1.5rem 2rem;}
+.cf{font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:#8aa0b4;margin-bottom:0.6rem;font-family:'BrokgauzEfron',Georgia,serif;}
+.ct{font-size:0.9rem;color:#444;line-height:1.8;font-weight:300;font-family:'BrokgauzEfron',Georgia,serif;}
+/* ИСТОРИЯ РОДА */
+.family-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;}
+.fcard{background:#fff;border:1px solid #e8e8e8;border-radius:16px;overflow:hidden;transition:box-shadow 0.2s,transform 0.2s;}
+.fcard:hover{box-shadow:0 4px 20px rgba(90,120,144,0.1);transform:translateY(-2px);}
+.fcard-photo{position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,#eef4f8,#e4ecf4);display:flex;align-items:center;justify-content:center;}
+.fcard-photo-inner{font-size:4rem;}
+.fcard-photo-label{position:absolute;bottom:0.75rem;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.85);border:1px dashed #c8d8e4;border-radius:6px;padding:0.25rem 0.75rem;font-size:0.65rem;color:#8aa0b4;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;}
+.fcard-info{padding:1.25rem 1.5rem;}
+.fcard-name{font-family:'BrokgauzEfron',Georgia,serif;font-size:1.3rem;color:#111;margin-bottom:0.2rem;}
+.fcard-role{font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:#8aa0b4;margin-bottom:0.75rem;font-weight:500;}
+.fcard-desc{font-size:0.85rem;color:#888;line-height:1.7;font-weight:300;}
+.fcard-add{border:1px dashed #d0dae4;background:#fafcfe;cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:200px;}
+.fcard-add:hover{background:#f0f6fa;border-color:#9ab8cc;}
+.fcard-add-inner{text-align:center;}
+.fcard-add-icon{font-size:2rem;color:#9ab8cc;margin-bottom:0.5rem;}
+.fcard-add-text{font-size:0.88rem;font-weight:500;color:#5a7a90;margin-bottom:0.2rem;font-family:'BrokgauzEfron',Georgia,serif;}
+.fcard-add-sub{font-size:0.75rem;color:#aaa;}
+/* MOBILE HAMBURGER MENU */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:0.5rem;background:none;border:none;}
+.hamburger span{width:22px;height:2px;background:#333;border-radius:2px;transition:all 0.3s;}
+.mobile-menu{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;}
+.mobile-menu-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.3);opacity:0;transition:opacity 0.35s ease;}
+.mobile-menu.open .mobile-menu-backdrop{opacity:1;}
+.mobile-menu-panel{position:absolute;top:0;right:0;width:72vw;max-width:280px;height:100%;background:#fff;padding:1.5rem 1rem;box-shadow:-4px 0 24px rgba(0,0,0,0.12);display:flex;flex-direction:column;gap:0.25rem;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);}
+.mobile-menu.open .mobile-menu-panel{transform:translateX(0);}
+.mobile-menu.open{display:block;}
+.mobile-menu-logo{font-family:'BrokgauzEfron',Georgia,serif;font-size:1.1rem;font-weight:600;color:#111;letter-spacing:0.08em;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #f0f0f0;}
+.mobile-menu-logo span{color:#9aa5b4;font-weight:300;}
+.mobile-menu-btn{background:none;border:none;padding:0.9rem 1rem;font-size:0.88rem;letter-spacing:0.06em;text-transform:uppercase;color:#666;cursor:pointer;font-family:'BrokgauzEfron',Georgia,serif;border-radius:8px;text-align:left;transition:all 0.15s;width:100%;}
+.mobile-menu-btn:hover{background:#f0f4f8;color:#333;}
+.mobile-menu-btn.active{background:linear-gradient(135deg,#dde5ec,#e6edf3);color:#4a6070;font-weight:600;}
+.mobile-menu-btn.jubilee{background:#8DA9C4;color:#fff!important;font-weight:600;margin-top:0.5rem;}
+@media(max-width:640px){
+  .hamburger{display:flex;}
+  .nav-links{display:none;}
+  nav{padding:0 1rem;}
+  .map-wrap svg{height:220px!important;}
+  .continent-tabs{gap:0.3rem;}
+  .ctab{padding:0.3rem 0.6rem;font-size:0.62rem;}
+  .inner{padding:1.5rem 1rem;}
+  .jtabs{gap:3px;}
+  .jtab{padding:5px 9px;font-size:0.7rem;}
+  .modal{max-height:90vh;overflow-y:auto;}
+}
+/* TREE PERSON MODAL */
+/* removed duplicate */
+.lightbox img{max-width:92vw;max-height:88vh;border-radius:8px;object-fit:contain;}
+.person-photo-wrap{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#eef4f8,#dde8f0);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.person-photo-wrap img{width:100%;height:100%;object-fit:cover;}
+.person-photo-emoji{font-size:5rem;}
+.person-info{padding:1.25rem 1.5rem 1.5rem;}
+.person-name-modal{font-family:'BrokgauzEfron',Georgia,serif;font-size:1.5rem;color:#111;margin-bottom:0.2rem;}
+.person-role-modal{font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:#8aa0b4;}
+.person-close{position:absolute;top:0.8rem;right:0.8rem;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:32px;height:32px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#555;box-shadow:0 2px 8px rgba(0,0,0,0.15);}top:1.2rem;right:1.5rem;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer;line-height:1;}
+.lightbox-prev,.lightbox-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.8rem;cursor:pointer;padding:0.6rem 1rem;border-radius:8px;transition:background 0.2s;}
+.lightbox-prev{left:1rem;}
+.lightbox-next{right:1rem;}
+.lightbox-prev:hover,.lightbox-next:hover{background:rgba(255,255,255,0.3);}
+.pslot img{cursor:pointer;transition:opacity 0.15s;}
+.pslot img:hover{opacity:0.85;}
+.tline{stroke:#e0e0e0;stroke-width:1.5;fill:none;}
+.tbox-node{fill:#fff;stroke:#e0e8f0;stroke-width:1.5;}
+.tbox-star{fill:#fff;stroke:#a0c0d4;stroke-width:2;}
+.tname{font-size:13px;font-weight:500;fill:#111;font-family:'BrokgauzEfron',Georgia,serif;}
+.trole{font-size:10px;fill:#aaa;font-family:'BrokgauzEfron',Georgia,serif;}
+.svg-node{cursor:pointer;}
+.svg-node:hover rect{stroke:#9ab8cc;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('home',null)">Shtykov<span> Family</span></div>
+  <ul class="nav-links">
+    <li><button onclick="showPage('tree',this)">Семья</button></li>
+    <li><button onclick="showPage('travels',this)">Путешествия</button></li>
+    <li><button onclick="showPage('ai',this)">История рода</button></li>
+    <li><button class="nav-jubilee" onclick="showPage('hobbies',this)">Юбилей 50</button></li>
+  </ul>
+  <button class="hamburger" onclick="openMobileMenu()" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-backdrop" onclick="closeMobileMenu()"></div>
+  <div class="mobile-menu-panel">
+    <div class="mobile-menu-logo">Shtykov<span> Family</span></div>
+    <button class="mobile-menu-btn" id="mb-home" onclick="showPage('home',null);closeMobileMenu()">Главная</button>
+    <button class="mobile-menu-btn" id="mb-tree" onclick="showPage('tree',null);closeMobileMenu()">Семья</button>
+    <button class="mobile-menu-btn" id="mb-travels" onclick="showPage('travels',null);closeMobileMenu()">Путешествия</button>
+    <button class="mobile-menu-btn" id="mb-ai" onclick="showPage('ai',null);closeMobileMenu()">История рода</button>
+    <button class="mobile-menu-btn jubilee" id="mb-hobbies" onclick="showPage('hobbies',null);closeMobileMenu()">Юбилей 50</button>
+  </div>
+</div>
+
+<!-- PERSON MODAL (дерево) -->
+<div class="person-overlay" id="personOverlay" onclick="if(event.target===this)closePersonModal()">
+  <div class="person-modal">
+    <button class="person-close" onclick="closePersonModal()">✕</button>
+    <div class="person-photo-wrap" id="personPhotoWrap"></div>
+    <div class="person-info">
+      <div class="person-name-modal" id="personName"></div>
+      <div class="person-role-modal" id="personRole"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="hero-wrap">
+    <img src="ЛОГО3.jpg" alt="Shtykov Family" class="hero-logo">
+    <div class="scroll-hint" id="scrollHint">
+      <div class="sh-line"></div><span>scroll</span>
+    </div>
+  </div>
+  <div class="hero-text">
+    <div class="hero-brand">SHTYKOV FAMILY</div>
+    <p class="hero-p">Папа всегда держал планку высоко — в делах, в жизни, в том, чего ждёт от нас. Именно поэтому, после долгих раздумий, мы решили сделать что-то постоянное.</p>
+    <p class="hero-p">Мы — младшее поколение Штыковых, И.Е.П.А.М. Этот сайт мы создали чтобы зафиксировать нашу семью — её историю, людей, места и достижения. Чтобы знать, кто мы и откуда. Чтобы это не исчезло.</p>
+    <p class="hero-p">Здесь вы найдёте историю рода, географию нашей жизни, видеопоздравления к 50-летию папы и многое другое. Сайт будет расти вместе с нами — пока живёт семья Штыковых.</p>
+  </div>
+  <div style="max-width:680px;margin:0 auto;padding:0 2.5rem 4rem;">
+    <img src="photos/ШТЫК1.png" alt="" style="width:100%;border-radius:16px;display:block;box-shadow:0 8px 32px rgba(0,0,0,0.08);">
+  </div>
+</div>
+
+<!-- СЕМЬЯ -->
+<div id="tree" class="page">
+  <div class="inner">
+    <div class="pg-title">Семейное дерево</div>
+    <div class="pg-sub">Самые близкие люди</div>
+    <div class="sep"></div>
+    <div style="width:100%;overflow-x:auto;">
+      <svg viewBox="0 0 720 430" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
+        <!-- Виктор центр x=255, Любовь центр x=375, середина = 315, Дима центр = 315 -->
+        <line class="tline" x1="255" y1="60" x2="375" y2="60"/>
+        <line class="tline" x1="315" y1="60" x2="315" y2="125"/>
+        <g class="svg-node" onclick="openPersonModal('Виктор','Дедушка','👴','photos/viktor.jpg')">
+          <rect class="tbox-node" x="210" y="18" width="90" height="85" rx="8"/>
+          <text x="255" y="48" text-anchor="middle" font-size="26">👴</text>
+          <text class="tname" x="255" y="68" text-anchor="middle">Виктор</text>
+          <text class="trole" x="255" y="85" text-anchor="middle">Дедушка</text>
+        </g>
+        <g class="svg-node" onclick="openPersonModal('Любовь','Бабушка','👵','photos/lubov.jpg')">
+          <rect class="tbox-node" x="330" y="18" width="90" height="85" rx="8"/>
+          <text x="375" y="48" text-anchor="middle" font-size="26">👵</text>
+          <text class="tname" x="375" y="68" text-anchor="middle">Любовь</text>
+          <text class="trole" x="375" y="85" text-anchor="middle">Бабушка</text>
+        </g>
+        <line class="tline" x1="61" y1="161" x2="180" y2="161"/>
+        <line class="tline" x1="225" y1="161" x2="270" y2="161"/>
+        <line class="tline" x1="360" y1="161" x2="500" y2="161"/>
+        <g class="svg-node" onclick="openPersonModal('Дима','Глава семьи','⭐','photos/dima.jpg')">
+          <rect class="tbox-star" x="270" y="125" width="90" height="85" rx="8"/>
+          <text x="315" y="155" text-anchor="middle" font-size="26">⭐</text>
+          <text class="tname" x="315" y="175" text-anchor="middle" fill="#4a7090">Дима</text>
+          <text class="trole" x="315" y="192" text-anchor="middle">Глава семьи</text>
+        </g>
+        <g class="svg-node" onclick="openPersonModal('Лена','Мама','👩','photos/lena.jpg')">
+          <rect class="tbox-node" x="135" y="125" width="90" height="85" rx="8"/>
+          <text x="180" y="155" text-anchor="middle" font-size="26">👩</text>
+          <text class="tname" x="180" y="175" text-anchor="middle">Лена</text>
+          <text class="trole" x="180" y="192" text-anchor="middle">Мама</text>
+        </g>
+        <g class="svg-node" onclick="openPersonModal('София','Мама','👩','photos/sofia.jpg')">
+          <rect class="tbox-node" x="16" y="125" width="90" height="85" rx="8"/>
+          <text x="61" y="155" text-anchor="middle" font-size="26">👩</text>
+          <text class="tname" x="61" y="175" text-anchor="middle">София</text>
+          <text class="trole" x="61" y="192" text-anchor="middle">Мама</text>
+        </g>
+        <g class="svg-node" onclick="openPersonModal('Татьяна','Мама','👩','photos/tatyana.jpg')">
+          <rect class="tbox-node" x="500" y="125" width="90" height="85" rx="8"/>
+          <text x="545" y="155" text-anchor="middle" font-size="26">👩</text>
+          <text class="tname" x="545" y="175" text-anchor="middle">Татьяна</text>
+          <text class="trole" x="545" y="192" text-anchor="middle">Мама</text>
+        </g>
+        <line class="tline" x1="180" y1="210" x2="180" y2="278"/>
+        <line class="tline" x1="61"  y1="210" x2="61"  y2="278"/>
+        <line class="tline" x1="545" y1="210" x2="545" y2="243"/>
+        <line class="tline" x1="455" y1="243" x2="635" y2="243"/>
+        <line class="tline" x1="455" y1="243" x2="455" y2="278"/>
+        <line class="tline" x1="545" y1="243" x2="545" y2="278"/>
+        <line class="tline" x1="635" y1="243" x2="635" y2="278"/>
+        <g class="svg-node" onclick="openPersonModal('Алиса','Дочь','👧','photos/alisa.jpg')">
+          <rect class="tbox-node" x="16" y="278" width="90" height="85" rx="8"/>
+          <text x="61" y="308" text-anchor="middle" font-size="26">👧</text>
+          <text class="tname" x="61" y="328" text-anchor="middle">Алиса</text>
+          <text class="trole" x="61" y="345" text-anchor="middle">Дочь</text>
+        </g>
+        <g class="svg-node" onclick="openPersonModal('Миша','Сын','👦','photos/misha.jpg')">
+          <rect class="tbox-node" x="135" y="278" width="90" height="85" rx="8"/>
+          <text x="180" y="308" text-anchor="middle" font-size="26">👦</text>
+          <text class="tname" x="180" y="328" text-anchor="middle">Миша</text>
+          <text class="trole" x="180" y="345" text-anchor="middle">Сын</text>
+        </g>
+        <g class="svg-node" onclick="openPersonModal('Петя','Сын','👦','photos/petya.jpg')">
+          <rect class="tbox-node" x="410" y="278" width="90" height="85" rx="8"/>
+          <text x="455" y="308" text-anchor="middle" font-size="26">👦</text>
+          <text class="tname" x="455" y="328" text-anchor="middle">Петя</text>
+          <text class="trole" x="455" y="345" text-anchor="middle">Сын</text>
+        </g>
+        <g class="svg-node" onclick="openPersonModal('Егор','Сын','👦','photos/egor.jpg')">
+          <rect class="tbox-node" x="500" y="278" width="90" height="85" rx="8"/>
+          <text x="545" y="308" text-anchor="middle" font-size="26">👦</text>
+          <text class="tname" x="545" y="328" text-anchor="middle">Егор</text>
+          <text class="trole" x="545" y="345" text-anchor="middle">Сын</text>
+        </g>
+        <g class="svg-node" onclick="openPersonModal('Илья','Сын','👦','photos/ilya.jpg')">
+          <rect class="tbox-node" x="590" y="278" width="90" height="85" rx="8"/>
+          <text x="635" y="308" text-anchor="middle" font-size="26">👦</text>
+          <text class="tname" x="635" y="328" text-anchor="middle">Илья</text>
+          <text class="trole" x="635" y="345" text-anchor="middle">Сын</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- TRAVELS -->
+<div id="travels" class="page">
+  <div class="inner">
+    <div class="pg-title">Путешествия</div>
+    <div class="pg-sub">Места, где побывала семья</div>
+    <div class="sep"></div>
+    <div class="continent-tabs">
+      <button class="ctab active" onclick="setContinent('all',this)">Все</button>
+      <button class="ctab" onclick="setContinent('europe',this)">Европа</button>
+      <button class="ctab" onclick="setContinent('russia',this)">Россия</button>
+      <button class="ctab" onclick="setContinent('namerica',this)">США</button>
+      <button class="ctab" onclick="setContinent('asia',this)">Азия</button>
+    </div>
+    <div class="map-wrap"><svg id="worldMap" style="width:100%;height:320px;display:block;"></svg></div>
+    <div class="place-cards" id="placeCards"></div>
+  </div>
+</div>
+
+<!-- ЮБИЛЕЙ 50 -->
+<div id="hobbies" class="page">
+  <div class="inner">
+    <div class="pg-title">Юбилей 50</div>
+    <div class="pg-sub">50 лет — это не возраст, это масштаб</div>
+    <div class="sep"></div>
+    <div class="jtabs">
+      <button class="jtab active" onclick="showJubilee(0,this)">Поздравления</button>
+      <button class="jtab" onclick="showJubilee(1,this)">Видео</button>
+      <button class="jtab" onclick="showJubilee(2,this)">Проект кепки</button>
+      <button class="jtab" onclick="showJubilee(3,this)">Проект брата</button>
+    </div>
+    <div class="jpanel active" id="jp0">
+      <div class="congrats-list">
+        <div class="citem"><div class="cf">От Ильи</div><div class="ct">Папа, ты всегда был для меня примером — в делах, в характере, в отношении к жизни. С 50-летием! Пусть всё, что ты строил, продолжает расти.</div></div>
+        <div class="citem"><div class="cf">От Егора</div><div class="ct">Папа, 50 лет — это только начало. Ты умеешь держать штурвал в любой шторм. Я горжусь тобой. С днём рождения!</div></div>
+        <div class="citem"><div class="cf">От Пети</div><div class="ct">
+          Дорогой папа!<br><br>
+          Поздравляю тебя с Днём Рождения — тебе сегодня 50 лет.<br><br>
+          Ты очень мудрый, умный, сильный, выносливый. В тебе множество хороших качеств, которые ты проработал за всю свою жизнь.<br><br>
+          У тебя дети, которые тебя любят и всегда готовы помочь. Я желаю тебе продолжать двигаться в этом направлении — ведь все мы хотим быть похожими на тебя. Ты наш пример.<br><br>
+          Желаю тебе прожить ещё очень долгую жизнь — с очень приятными людьми и моментами!
+        </div></div>
+      </div>
+    </div>
+    <div class="jpanel" id="jp1">
+      <div style="background:#f9f9f9;border:1px solid #ebebeb;border-radius:12px;overflow:hidden;margin-top:1rem;">
+        <div style="position:relative;padding-bottom:56.25%;height:0;">
+          <iframe id="ytPlayer"
+            src="https://www.youtube.com/embed/Xp_XRKEnLwI?rel=0&modestbranding=1"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:12px;"
+            allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+          </iframe>
+        </div>
+      </div>
+    </div>
+    <div class="jpanel" id="jp2">
+      <div class="jsketch">
+        <img src="photos/cap_sketch.jpg" onload="this.style.display='block';" onerror="this.style.display='none';" style="width:100%;border-radius:8px;display:none;">
+      </div>
+    </div>
+    <div class="jpanel" id="jp3">
+      <div style="background:#f5f8fa;border:1px solid #dde8f0;border-radius:12px;padding:2.5rem 2rem;text-align:center;">
+        <div style="font-size:3rem;margin-bottom:1rem;">📄</div>
+        <div style="font-family:'BrokgauzEfron',Georgia,serif;font-size:1.1rem;color:#111;margin-bottom:0.5rem;">Проект брата</div>
+        <div style="font-size:0.82rem;color:#aaa;margin-bottom:1.5rem;">Нажми чтобы открыть или скачать</div>
+        <a href="brother_sketch.pdf" target="_blank"
+          style="display:inline-block;background:#8DA9C4;color:#fff;padding:0.75rem 2rem;border-radius:8px;font-family:'BrokgauzEfron',Georgia,serif;font-size:0.85rem;letter-spacing:0.08em;text-decoration:none;transition:background 0.2s;"
+          onmouseover="this.style.background='#7a98b3'" onmouseout="this.style.background='#8DA9C4'">
+          Открыть PDF
+        </a>
+      </div>
+      <div class="citem" style="margin-top:1px;">
+        <div class="cf">Описание проекта</div>
+        <div class="ct">Напиши описание проекта брата — и я вставлю его сюда.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ИСТОРИЯ РОДА -->
+<div id="ai" class="page">
+  <div class="inner">
+    <div class="pg-title">История рода</div>
+    <div class="pg-sub">Люди, которые стоят за фамилией Штыковы</div>
+    <div class="sep"></div>
+    <div class="family-grid">
+      <div class="fcard">
+        <div class="fcard-photo" style="cursor:pointer;" onclick="openFamilyPhoto('photos/viktor.jpg')">
+          <img src="photos/viktor.jpg" onerror="this.style.display='none';document.getElementById('viktorEmoji').style.display='flex';" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <div id="viktorEmoji" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;position:absolute;inset:0;">
+            <div class="fcard-photo-inner">👴</div>
+          </div>
+        </div>
+        <div class="fcard-info">
+          <div class="fcard-name">Виктор Штыков</div>
+          <div class="fcard-role">Дедушка</div>
+          <div class="fcard-desc" style="line-height:1.9;">
+            <p>Виктор Штыков — сын Петра Штыкова и Марии. В их семье, помимо Виктора, была ещё дочь Людмила. Он родился в городе Кировабад (ныне Гянджа, Азербайджан).</p>
+            <p style="margin-top:0.75rem;">Его отец был военным, поэтому семья часто переезжала. После Азербайджана они жили в Орске, а затем переехали в Москву.</p>
+            <p style="margin-top:0.75rem;">Именно в Москве Виктор встретил Любовь. И в их семье родился сын Дмитрий.</p>
+            <p style="margin-top:0.75rem;">Виктор всегда был для него примером — надёжным, сильным, настоящим. Во многом благодаря отцу Дмитрий вырос человеком умным, целеустремлённым, с аналитическим складом ума, открытым к людям и с прекрасным чувством юмора.</p>
+            <p style="margin-top:0.75rem;font-style:italic;color:#9ab0c4;">Посмотрите, каким Виктор остался в нашей памяти — в живых моментах, взглядах и той теплоте, которую невозможно забыть.</p>
+          </div>
+        </div>
+      </div>
+      <div class="fcard fcard-add" onclick="alert('Напиши кого добавить!')">
+        <div class="fcard-add-inner"><div class="fcard-add-icon">+</div><div class="fcard-add-text">Добавить члена семьи</div><div class="fcard-add-sub">Брат, сестра, дядя, тётя...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="mhead">
+      <div><div class="mtitle" id="mTitle"></div><div class="msub" id="mSub"></div></div>
+      <button class="mclose" onclick="closeModal()">✕</button>
+    </div>
+    <div class="mphotos"><div class="photo-grid" id="mPhotos"></div></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-prev" onclick="lbNav(-1)">‹</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lightbox-next" onclick="lbNav(1)">›</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+const worldPlaces = [
+  // ЕВРОПА
+  {name:'Мюнхен',           country:'Германия', flag:'🇩🇪', continent:'europe',   lon:11.58,  lat:48.14,
+   photos:['photos/munich1.jpg','photos/munich2.jpg','photos/munich3.jpg','photos/munich4.jpg']},
+  {name:'Долина Гаштайн',   country:'Австрия',  flag:'🇦🇹', continent:'europe',   lon:13.10,  lat:47.12,
+   photos:['photos/goshtain1.jpg','photos/goshtain2.jpg','photos/goshtain3.jpg','photos/goshtain4.jpg']},
+  {name:'Обзор',            country:'Болгария', flag:'🇧🇬', continent:'europe',   lon:27.88,  lat:42.81,
+   photos:['photos/obzor1.jpg','photos/obzor2.jpg','photos/obzor3.jpg','photos/obzor4.jpg']},
+  {name:'Рим',              country:'Италия',   flag:'🇮🇹', continent:'europe',   lon:12.50,  lat:41.90,
+   photos:['photos/rome1.jpg','photos/rome2.jpg','photos/rome3.jpg','photos/rome4.jpg']},
+  {name:'Сардиния',         country:'Италия',   flag:'🇮🇹', continent:'europe',   lon:9.10,   lat:40.12,
+   photos:['photos/sardinia1.jpg','photos/sardinia2.jpg','photos/sardinia3.jpg','photos/sardinia4.jpg']},
+  {name:'Эгейские острова', country:'Греция',   flag:'🏝️',  continent:'europe',   lon:25.40,  lat:37.50,
+   photos:['photos/aegean1.jpg','photos/aegean2.jpg','photos/aegean3.jpg','photos/aegean4.jpg']},
+  {name:'Стамбул',          country:'Турция',   flag:'🇹🇷', continent:'europe',   lon:28.98,  lat:41.01,
+   photos:['photos/istanbul1.jpg','photos/istanbul2.jpg','photos/istanbul3.jpg','photos/istanbul4.jpg']},
+  {name:'Батуми',           country:'Грузия',   flag:'🇬🇪', continent:'europe',   lon:41.64,  lat:41.64,
+   photos:['photos/batumi1.jpg','photos/batumi2.jpg','photos/batumi3.jpg','photos/batumi4.jpg']},
+  {name:'Ереван',           country:'Армения',  flag:'🇦🇲', continent:'europe',   lon:44.50,  lat:40.18,
+   photos:['photos/yerevan1.jpg','photos/yerevan2.jpg','photos/yerevan3.jpg','photos/yerevan4.jpg']},
+  // РОССИЯ
+  {name:'Москва',           country:'Россия',   flag:'🇷🇺', continent:'russia',   lon:37.62,  lat:55.75,
+   photos:['photos/moscow1.jpg','photos/moscow2.jpg','photos/moscow3.jpg','photos/moscow4.jpg']},
+  {name:'Анапа',            country:'Россия',   flag:'🇷🇺', continent:'russia',   lon:37.32,  lat:44.89,
+   photos:['photos/anapa1.jpg','photos/anapa2.jpg','photos/anapa3.jpg','photos/anapa4.jpg']},
+  {name:'Сочи',             country:'Россия',   flag:'🇷🇺', continent:'russia',   lon:39.72,  lat:43.59,
+   photos:['photos/sochi1.jpg','photos/sochi2.jpg','photos/sochi3.jpg','photos/sochi4.jpg']},
+  {name:'Нижний Новгород',  country:'Россия',   flag:'🇷🇺', continent:'russia',   lon:44.00,  lat:56.33,
+   photos:['photos/nnov1.jpg','photos/nnov2.jpg','photos/nnov3.jpg','photos/nnov4.jpg']},
+  {name:'Орёл',             country:'Россия',   flag:'🇷🇺', continent:'russia',   lon:36.07,  lat:52.97,
+   photos:['photos/orel1.jpg','photos/orel2.jpg','photos/orel3.jpg','photos/orel4.jpg']},
+  // США
+  {name:'Орландо',          country:'США',      flag:'🇺🇸', continent:'namerica', lon:-81.38, lat:28.54,
+   photos:['photos/orlando1.jpg','photos/orlando2.jpg','photos/orlando3.jpg','photos/orlando4.jpg']},
+  {name:'Майами',           country:'США',      flag:'🇺🇸', continent:'namerica', lon:-80.19, lat:25.77,
+   photos:['photos/miami1.jpg','photos/miami2.jpg','photos/miami3.jpg','photos/miami4.jpg']},
+  {name:'Нью-Йорк',         country:'США',      flag:'🇺🇸', continent:'namerica', lon:-74.01, lat:40.71,
+   photos:['photos/newyork1.jpg','photos/newyork2.jpg','photos/newyork3.jpg','photos/newyork4.jpg']},
+  // АЗИЯ
+  {name:'Фукуок',           country:'Вьетнам',  flag:'🇻🇳', continent:'asia',     lon:104.00, lat:10.29, current:true,
+   photos:['photos/fuquoc1.jpg','photos/fuquoc2.jpg','photos/fuquoc3.jpg','photos/fuquoc4.jpg']},
+  {name:'Пхукет',           country:'Таиланд',  flag:'🇹🇭', continent:'asia',     lon:98.39,  lat:7.88,
+   photos:['photos/phuket1.jpg','photos/phuket2.jpg','photos/phuket3.jpg','photos/phuket4.jpg']},
+  {name:'Токио',            country:'Япония',   flag:'🇯🇵', continent:'asia',     lon:139.69, lat:35.69,
+   photos:['photos/tokyo1.jpg','photos/tokyo2.jpg','photos/tokyo3.jpg','photos/tokyo4.jpg']},
+];
+
+const continentView = {
+  all:      {scale:140, cx:10,  cy:15},
+  europe:   {scale:420, cx:22,  cy:50},
+  russia:   {scale:320, cx:48,  cy:58},
+  namerica: {scale:300, cx:-90, cy:42},
+  asia:     {scale:300, cx:105, cy:25},
+};
+
+const visitedIDs = {
+  all:      ['DEU','AUT','BGR','ITA','GRC','TUR','GEO','ARM','RUS','USA','VNM','THA','JPN'],
+  europe:   ['DEU','AUT','BGR','ITA','GRC','TUR','GEO','ARM'],
+  russia:   ['RUS'],
+  namerica: ['USA'],
+  asia:     ['VNM','THA','JPN'],
+};
+
+const idToA3 = {
+  276:'DEU', 40:'AUT', 100:'BGR', 380:'ITA', 300:'GRC', 792:'TUR',
+  268:'GEO', 51:'ARM', 643:'RUS', 840:'USA', 704:'VNM', 764:'THA', 392:'JPN',
+};
+
+let currentContinent = 'all';
+let mapSvg, mapProjection, mapPath, mapG;
+
+function initMap() {
+  const wrap = document.querySelector('.map-wrap');
+  const W = wrap.clientWidth || 800, H = 320;
+  mapSvg = d3.select('#worldMap').attr('viewBox', `0 0 ${W} ${H}`);
+  const v = continentView.all;
+  mapProjection = d3.geoNaturalEarth1().scale(v.scale).center([v.cx, v.cy]).translate([W/2, H/2]);
+  mapPath = d3.geoPath().projection(mapProjection);
+  mapG = mapSvg.append('g');
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+    .then(r => r.json())
+    .then(world => {
+      const countries = topojson.feature(world, world.objects.countries);
+      mapG.selectAll('.country').data(countries.features).enter().append('path')
+        .attr('class', 'country').attr('d', mapPath)
+        .attr('fill', d => { const a = idToA3[+d.id]; return visitedIDs.all.includes(a) ? '#7aaabf' : '#c8d8e4'; })
+        .attr('stroke', '#fff').attr('stroke-width', 0.5);
+      renderPins();
+      renderCards();
+    });
+}
+
+function setContinent(c, btn) {
+  currentContinent = c;
+  document.querySelectorAll('.ctab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const v = continentView[c] || continentView.all;
+  const wrap = document.querySelector('.map-wrap');
+  const W = wrap.clientWidth || 800, H = 320;
+  mapProjection.scale(v.scale).center([v.cx, v.cy]).translate([W/2, H/2]);
+  mapG.selectAll('.country')
+    .transition().duration(600).ease(d3.easeCubicInOut)
+    .attr('d', mapPath)
+    .attr('fill', d => { const a = idToA3[+d.id]; const vis = visitedIDs[c] || visitedIDs.all; return vis.includes(a) ? '#7aaabf' : '#c8d8e4'; });
+  setTimeout(() => { renderPins(); renderCards(); }, 50);
+}
+
+function renderPins() {
+  mapG.selectAll('.pin-group').remove();
+  const places = currentContinent === 'all' ? worldPlaces : worldPlaces.filter(p => p.continent === currentContinent);
+  places.forEach(p => {
+    const coords = mapProjection([p.lon, p.lat]);
+    if (!coords) return;
+    const isCurrent = p.current === true;
+    const pg = mapG.append('g').attr('class', 'pin-group')
+      .attr('transform', `translate(${coords[0]},${coords[1]})`).style('cursor', 'pointer');
+
+    if (isCurrent) {
+      // Пульсирующий красный круг для текущего местоположения
+      pg.append('circle').attr('r', 10).attr('fill', 'rgba(220,50,50,0.2)').attr('stroke', '#dc3232').attr('stroke-width', 1.5)
+        .append('animate').attr('attributeName','r').attr('values','8;14;8').attr('dur','2s').attr('repeatCount','indefinite');
+      pg.append('circle').attr('r', 5).attr('fill', '#dc3232').attr('stroke', '#fff').attr('stroke-width', 1.5);
+    } else {
+      pg.append('circle').attr('r', 4).attr('fill', '#2a6080').attr('stroke', '#fff').attr('stroke-width', 1.5);
+    }
+
+    // Большая прозрачная зона для удобного нажатия на телефоне
+    pg.append('circle').attr('r', 14).attr('fill', 'transparent');
+
+    const lw = p.name.length * 7 + 16;
+    pg.append('rect').attr('x', -lw/2).attr('y', -22).attr('width', lw).attr('height', 14).attr('rx', 3)
+      .attr('fill', '#fff').attr('stroke', '#d0e4f0').attr('stroke-width', 0.8).attr('opacity', 0).attr('class', 'plabel-bg');
+    pg.append('text').attr('text-anchor', 'middle').attr('y', -12).attr('font-size', 9)
+      .attr('fill', isCurrent ? '#dc3232' : '#2a5068').attr('font-family', "'BrokgauzEfron',Georgia,serif").attr('font-weight', 600)
+      .text(p.name).attr('opacity', 0).attr('class', 'plabel-txt');
+
+    pg.on('click', () => openModal(p))
+      .on('mouseover', function() {
+        d3.select(this).select('.plabel-bg').attr('opacity', 1);
+        d3.select(this).select('.plabel-txt').attr('opacity', 1);
+      })
+      .on('mouseout', function() {
+        d3.select(this).select('.plabel-bg').attr('opacity', 0);
+        d3.select(this).select('.plabel-txt').attr('opacity', 0);
+      });
+  });
+}
+
+function renderCards() {
+  const el = document.getElementById('placeCards');
+  if (!el) return;
+  const places = currentContinent === 'all' ? worldPlaces : worldPlaces.filter(p => p.continent === currentContinent);
+  el.innerHTML = places.map(p => {
+    const isCurrent = p.current === true;
+    const style = isCurrent
+      ? 'background:#fff5f5;border-color:#dc3232;'
+      : '';
+    const nameStyle = isCurrent ? 'color:#dc3232;font-weight:600;' : '';
+    const badge = isCurrent ? '<div style="font-size:0.6rem;color:#dc3232;letter-spacing:0.08em;text-transform:uppercase;margin-top:0.2rem;">● сейчас здесь</div>' : '';
+    return `<div class="place-card" style="${style}" onclick='openModal(${JSON.stringify(p)})'><div class="pc-flag">${p.flag}</div><div class="pc-name" style="${nameStyle}">${p.name}</div><div class="pc-country">${p.country}</div>${badge}</div>`;
+  }).join('');
+}
+
+function openFamilyPhoto(src) {
+  lbPhotos = [src]; lbIndex = 0;
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+
+let lbPhotos = [], lbIndex = 0;
+
+function openLightbox(photos, index) {
+  lbPhotos = photos; lbIndex = index;
+  document.getElementById('lbImg').src = photos[index];
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+function lbNav(dir) {
+  lbIndex = (lbIndex + dir + lbPhotos.length) % lbPhotos.length;
+  document.getElementById('lbImg').src = lbPhotos[lbIndex];
+}
+document.addEventListener('keydown', e => {
+  if (document.getElementById('lightbox').classList.contains('open')) {
+    if (e.key === 'ArrowLeft') lbNav(-1);
+    if (e.key === 'ArrowRight') lbNav(1);
+    if (e.key === 'Escape') closeLightbox();
+  }
+});
+
+function openModal(p) {
+  document.getElementById('mTitle').textContent = p.flag + ' ' + p.name;
+  document.getElementById('mSub').textContent = p.country;
+  const ph = document.getElementById('mPhotos');
+  ph.innerHTML = '';
+  const photos = p.photos || [];
+  const realPhotos = photos.filter(Boolean);
+  for (let i = 0; i < 4; i++) {
+    const s = document.createElement('div');
+    s.className = 'pslot';
+    if (photos[i]) {
+      const img = document.createElement('img');
+      img.src = photos[i];
+      img.onclick = () => openLightbox(realPhotos, realPhotos.indexOf(photos[i]));
+      img.onerror = () => { s.innerHTML = '<span>📷</span>Фото ' + (i+1); };
+      s.style.padding = '0'; s.style.border = 'none';
+      s.appendChild(img);
+    } else {
+      s.innerHTML = `<span>📷</span>Фото ${i+1}`;
+    }
+    ph.appendChild(s);
+  }
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+function showPage(id, btn) {
+  const current = document.querySelector('.page.active');
+  if (current) {
+    current.style.opacity = '0';
+    setTimeout(() => {
+      document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.opacity = ''; });
+      const next = document.getElementById(id);
+      next.classList.add('active');
+      setTimeout(() => { next.style.opacity = '1'; }, 10);
+    }, 200);
+  } else {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+  document.querySelectorAll('.nav-links li button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.mobile-menu-btn').forEach(b => b.classList.remove('active'));
+  const mb = document.getElementById('mb-' + id);
+  if (mb) mb.classList.add('active');
+  if (id === 'travels') { setTimeout(() => { if (!mapG) initMap(); else { renderPins(); renderCards(); } }, 300); }
+}
+
+function showJubilee(i, btn) {
+  document.querySelectorAll('.jpanel').forEach((p, j) => p.classList.toggle('active', j === i));
+  document.querySelectorAll('.jtab').forEach((t, j) => t.classList.toggle('active', j === i));
+}
+
+setTimeout(() => {
+  const sh = document.getElementById('scrollHint');
+  if (sh) sh.classList.add('vis');
+}, 500);
+
+// MOBILE MENU
+function openMobileMenu() { document.getElementById('mobileMenu').classList.add('open'); }
+function closeMobileMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
+
+// PERSON MODAL (дерево — одна фотка)
+function openPersonModal(name, role, emoji, photoSrc) {
+  document.getElementById('personName').textContent = name;
+  document.getElementById('personRole').textContent = role;
+  const wrap = document.getElementById('personPhotoWrap');
+  wrap.innerHTML = '';
+  const img = document.createElement('img');
+  img.src = photoSrc;
+  img.onerror = () => { wrap.innerHTML = `<div class="person-photo-emoji">${emoji}</div>`; };
+  wrap.appendChild(img);
+  document.getElementById('personOverlay').classList.add('open');
+}
+function closePersonModal() { document.getElementById('personOverlay').classList.remove('open'); }
+</script>
+</body>
+</html>
