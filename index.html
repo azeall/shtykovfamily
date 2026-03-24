@@ -157,7 +157,7 @@ nav{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-bottom:1
 /* removed duplicate */
 .lightbox img{max-width:92vw;max-height:88vh;border-radius:8px;object-fit:contain;}
 .person-photo-wrap{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#eef4f8,#dde8f0);display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.person-photo-wrap img{width:100%;height:100%;object-fit:cover;}
+.person-photo-wrap img{width:100%;height:100%;object-fit:contain;background:#f5f8fa;}
 .person-photo-emoji{font-size:5rem;}
 .person-info{padding:1.25rem 1.5rem 1.5rem;}
 .person-name-modal{font-family:'BrokgauzEfron',Georgia,serif;font-size:1.5rem;color:#111;margin-bottom:0.2rem;}
@@ -430,9 +430,11 @@ nav{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-bottom:1
     <div class="sep"></div>
     <div class="family-grid">
       <div class="fcard">
-        <div class="fcard-photo" style="cursor:pointer;" onclick="openFamilyPhoto('photos/viktor.jpg')">
-          <img src="photos/viktor.jpg" onerror="this.style.display='none';document.getElementById('viktorEmoji').style.display='flex';" style="width:100%;height:100%;object-fit:cover;display:block;">
-          <div id="viktorEmoji" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;position:absolute;inset:0;">
+        <div class="fcard-photo" style="cursor:pointer;background:#000;">
+          <video src="photos/victor.mp4" controls style="width:100%;height:100%;object-fit:cover;display:block;"
+            onerror="this.style.display='none';document.getElementById('viktorEmoji').style.display='flex';">
+          </video>
+          <div id="viktorEmoji" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;position:absolute;inset:0;background:linear-gradient(135deg,#eef4f8,#e4ecf4);">
             <div class="fcard-photo-inner">👴</div>
           </div>
         </div>
@@ -445,11 +447,6 @@ nav{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-bottom:1
             <p style="margin-top:0.75rem;">Именно в Москве Виктор встретил Любовь. И в их семье родился сын Дмитрий.</p>
             <p style="margin-top:0.75rem;">Виктор всегда был для него примером — надёжным, сильным, настоящим. Во многом благодаря отцу Дмитрий вырос человеком умным, целеустремлённым, с аналитическим складом ума, открытым к людям и с прекрасным чувством юмора.</p>
             <p style="margin-top:0.75rem;font-style:italic;color:#9ab0c4;">Посмотрите, каким Виктор остался в нашей памяти — в живых моментах, взглядах и той теплоте, которую невозможно забыть.</p>
-          </div>
-          <div style="margin-top:1rem;">
-            <video src="photos/victor.mp4" controls style="width:100%;border-radius:8px;display:block;"
-              onerror="this.style.display='none';">
-            </video>
           </div>
         </div>
       </div>
